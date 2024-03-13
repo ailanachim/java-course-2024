@@ -1,9 +1,13 @@
 package edu.java.clients;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 public class GitHubClient {
 
@@ -19,8 +23,22 @@ public class GitHubClient {
     }
 
     public OffsetDateTime getLastModifiedTime(String uri) {
-        Mono<Response> responseMono = webClient.get().uri(uri).retrieve().bodyToMono(Response.class);
-        return responseMono.block().modifiedTime();
+        ResponseEntity<Response> response = webClient.get()
+            .uri(uri)
+            .retrieve()
+            .onStatus(
+                HttpStatusCode::isError,
+                ClientResponse::createError
+            )
+            .toEntity(Response.class)
+            .block();
+
+        long millis = response.getHeaders().getLastModified();
+        if (millis != -1) {
+            return OffsetDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC);
+        }
+
+        return response.getBody().modifiedTime();
     }
 
     record Response(@JsonProperty("updated_at") OffsetDateTime modifiedTime) {

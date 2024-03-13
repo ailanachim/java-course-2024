@@ -14,6 +14,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.common.ContentTypes.APPLICATION_JSON;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpHeaders.LAST_MODIFIED;
 
 public class GitHubTest {
 
@@ -36,6 +37,7 @@ public class GitHubTest {
         stubFor(get(url)
             .willReturn(ok()
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .withHeader(LAST_MODIFIED, "Wed, 13 Mar 2024 12:37:18 GMT")
                 .withBody("""
                     {
                         "id": 40182023,
@@ -51,6 +53,6 @@ public class GitHubTest {
 
         GitHubClient client = new GitHubClient(wireMockServer.baseUrl());
         assertThat(client.getLastModifiedTime(url)).isEqualTo(OffsetDateTime.parse(
-            "2024-02-24T18:21:20Z"));
+            "2024-03-13T12:37:18Z"));
     }
 }

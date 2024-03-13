@@ -35,7 +35,7 @@ public class StackOverflowTest {
     @Test
     void test() {
         String url = "/questions/32435456";
-        stubFor(get(url)
+        stubFor(get(url + "?site=stackoverflow")
             .willReturn(ok()
                 .withHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .withBody("""
