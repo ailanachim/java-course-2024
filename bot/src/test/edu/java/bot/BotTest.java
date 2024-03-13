@@ -15,7 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BotTest {
 
@@ -63,31 +63,30 @@ public class BotTest {
         String link1 = "https://stackoverflow.com/questions/43164923";
         String link2 = "https://stackoverflow.com/questions/46030405";
 
-        assertThat(sendMessage("/start")).isEqualTo("Привет! Это бот для отслеживания обновлений");
+        assertEquals("Привет! Это бот для отслеживания обновлений", sendMessage("/start"));
 
-        assertThat(sendMessage("/track")).isEqualTo("Введите ссылку на ресурс, который хотите отслеживать");
-        assertThat(sendMessage(link)).isEqualTo(link + " теперь отслеживается");
+        assertEquals("Введите ссылку на ресурс, который хотите отслеживать", sendMessage("/track"));
+        assertEquals(link + " теперь отслеживается", sendMessage(link));
 
-        assertThat(sendMessage("/track")).isEqualTo("Введите ссылку на ресурс, который хотите отслеживать");
-        assertThat(sendMessage(link1)).isEqualTo(link1 + " теперь отслеживается");
+        assertEquals("Введите ссылку на ресурс, который хотите отслеживать", sendMessage("/track"));
+        assertEquals(link1 + " теперь отслеживается", sendMessage(link1));
 
-        assertThat(sendMessage("/track")).isEqualTo("Введите ссылку на ресурс, который хотите отслеживать");
-        assertThat(sendMessage(link1)).isEqualTo("Неверный адрес или ресурс уже отслеживается");
+        assertEquals("Введите ссылку на ресурс, который хотите отслеживать", sendMessage("/track"));
+        assertEquals("Неверный адрес или ресурс уже отслеживается", sendMessage(link1));
 
-        assertThat(sendMessage("/list")).isEqualTo("Сейчас отслеживаются:\n" + link + "\n" + link1);
+        assertEquals("Сейчас отслеживаются:\n" + link + "\n" + link1, sendMessage("/list"));
 
-        assertThat(sendMessage("/untrack")).isEqualTo("Введите ссылку, которую вы больше не хотите отслеживать");
-        assertThat(sendMessage(link2)).isEqualTo("Вы не отслеживаете " + link2);
+        assertEquals("Введите ссылку, которую вы больше не хотите отслеживать", sendMessage("/untrack"));
+        assertEquals("Вы не отслеживаете " + link2, sendMessage(link2));
 
-        assertThat(sendMessage("/untrack")).isEqualTo("Введите ссылку, которую вы больше не хотите отслеживать");
-        assertThat(sendMessage(link1)).isEqualTo(link1 + " больше не отслеживается");
+        assertEquals("Введите ссылку, которую вы больше не хотите отслеживать", sendMessage("/untrack"));
+        assertEquals(link1 + " больше не отслеживается", sendMessage(link1));
 
-        assertThat(sendMessage("/list")).isEqualTo("Сейчас отслеживаются:\n" + link);
+        assertEquals("Сейчас отслеживаются:\n" + link, sendMessage("/list"));
+        assertEquals("Вы больше не отслеживаете " + link, sendMessage("/untrack"));
 
-        assertThat(sendMessage("/untrack")).isEqualTo("Вы больше не отслеживаете " + link);
-
-        assertThat(sendMessage("/list")).isEqualTo("Вы ничего не отслеживаете");
-        assertThat(sendMessage("/untrack")).isEqualTo("Вы ничего не отслеживаете");
+        assertEquals("Вы ничего не отслеживаете", sendMessage("/untrack"));
+        assertEquals("Вы ничего не отслеживаете", sendMessage("/list"));
     }
 
 }
