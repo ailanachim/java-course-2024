@@ -37,7 +37,9 @@ public class InMemoryUserService implements UserService {
             }
             links.add(url);
         } else {
-            userLinks.put(userId, new ArrayList<>() {{add(url);}});
+            userLinks.put(userId, new ArrayList<>() {{
+                add(url);
+            }});
         }
         userStates.put(userId, UserState.DEFAULT);
         return true;
