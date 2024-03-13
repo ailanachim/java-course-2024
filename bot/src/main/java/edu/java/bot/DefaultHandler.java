@@ -2,17 +2,14 @@ package edu.java.bot;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DefaultHandler implements MessageHandler {
 
     private final UserService userService;
-
-    public DefaultHandler(@Autowired UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public SendMessage handle(Update update) {

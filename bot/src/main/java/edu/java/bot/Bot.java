@@ -3,21 +3,35 @@ package edu.java.bot;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import edu.java.bot.configuration.ApplicationConfig;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class Bot {
+@Component
+public class Bot implements UpdatesListener, Runnable {
 
-    private final TelegramBot bot;
+    @Autowired
+    private ApplicationConfig applicationConfig;
+    private TelegramBot bot;
+    private final UserMessageHandler messageHandler;
 
-    public Bot(String telegramToken, MessageHandler messageHandler) {
-        this.bot = new TelegramBot(telegramToken);
+    public Bot(UserMessageHandler messageHandler) {
+        this.messageHandler = messageHandler;
+    }
 
-        bot.setUpdatesListener(updates -> {
+    @Override
+    public void run() {
+        bot = new TelegramBot(applicationConfig.telegramToken());
+        bot.setUpdatesListener(this);
+    }
 
-            for (Update update : updates) {
+    @Override
+    public int process(List<Update> list) {
+        for (Update update : list) {
                 bot.execute(messageHandler.handle(update));
             }
 
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        });
+        return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 }
